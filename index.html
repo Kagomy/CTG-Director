@@ -468,16 +468,17 @@
         /* ===== VOLUNTEERS ===== */
         .volunteer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
         }
 
         .volunteer-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 16px 18px;
+            padding: 18px 20px;
             transition: var(--transition);
+            position: relative;
         }
         .volunteer-card:hover {
             border-color: var(--border-hover);
@@ -487,10 +488,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .volunteer-card .vname {
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text-primary);
         }
         .volunteer-card .vname .badge {
@@ -550,20 +553,25 @@
             transition: width 0.6s ease;
         }
 
+        .volunteer-card .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
         .volunteer-card .btn-task {
             background: rgba(30, 122, 46, 0.12);
             border: none;
-            padding: 3px 14px;
+            padding: 3px 12px;
             border-radius: 3px;
             font-weight: 600;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             cursor: pointer;
             color: var(--accent);
             transition: var(--transition);
             text-transform: uppercase;
             letter-spacing: 0.3px;
-            margin-right: 4px;
-            margin-top: 4px;
         }
         .volunteer-card .btn-task:hover {
             background: var(--accent);
@@ -573,23 +581,58 @@
         .volunteer-card .btn-task-xp {
             background: rgba(184, 122, 42, 0.12);
             border: none;
-            padding: 3px 14px;
+            padding: 3px 12px;
             border-radius: 3px;
             font-weight: 600;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             cursor: pointer;
             color: var(--warning);
             transition: var(--transition);
             text-transform: uppercase;
             letter-spacing: 0.3px;
-            margin-top: 4px;
         }
         .volunteer-card .btn-task-xp:hover {
             background: var(--warning);
             color: var(--bg-primary);
         }
 
-        /* ===== MODAL ===== */
+        .volunteer-card .btn-edit {
+            background: rgba(30, 122, 46, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 3px 12px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.6rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .volunteer-card .btn-edit:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .volunteer-card .btn-portfolio {
+            background: rgba(30, 122, 46, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 3px 12px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.6rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .volunteer-card .btn-portfolio:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== PORTFOLIO MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -612,8 +655,10 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 32px 36px;
-            max-width: 480px;
+            max-width: 600px;
             width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
             box-shadow: 0 40px 80px var(--shadow);
         }
 
@@ -625,6 +670,14 @@
             color: var(--text-primary);
             margin-bottom: 18px;
         }
+        .modal-content h2 .sub {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
         .modal-content label {
             font-weight: 500;
             display: block;
@@ -635,7 +688,8 @@
             color: var(--text-secondary);
         }
         .modal-content input,
-        .modal-content select {
+        .modal-content select,
+        .modal-content textarea {
             width: 100%;
             padding: 8px 12px;
             background: var(--input-bg);
@@ -647,11 +701,17 @@
             transition: var(--transition);
         }
         .modal-content input:focus,
-        .modal-content select:focus {
+        .modal-content select:focus,
+        .modal-content textarea:focus {
             border-color: var(--accent);
             outline: none;
         }
-        .modal-content input::placeholder {
+        .modal-content textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .modal-content input::placeholder,
+        .modal-content textarea::placeholder {
             color: var(--text-muted);
         }
         .modal-content select option {
@@ -682,6 +742,13 @@
         .modal-actions .btn-confirm:hover {
             background: var(--accent-hover);
         }
+        .modal-actions .btn-danger {
+            background: var(--danger);
+            color: var(--bg-primary);
+        }
+        .modal-actions .btn-danger:hover {
+            background: var(--danger-hover);
+        }
         .modal-actions .btn-cancel {
             background: var(--bg-card);
             color: var(--text-secondary);
@@ -689,6 +756,60 @@
         }
         .modal-actions .btn-cancel:hover {
             border-color: var(--text-muted);
+        }
+
+        /* ===== PORTFOLIO ITEMS ===== */
+        .portfolio-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .portfolio-item .p-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        .portfolio-item .p-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            flex: 1;
+            min-width: 120px;
+        }
+        .portfolio-item .p-status {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 2px 10px;
+            border-radius: 2px;
+            background: rgba(30, 122, 46, 0.12);
+            color: var(--accent);
+        }
+        .portfolio-item .p-status.completed {
+            background: rgba(30, 122, 46, 0.2);
+            color: var(--accent);
+        }
+        .portfolio-item .p-status.pending {
+            background: rgba(184, 122, 42, 0.15);
+            color: var(--warning);
+        }
+        .portfolio-item .btn-p-delete {
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            transition: var(--transition);
+        }
+        .portfolio-item .btn-p-delete:hover {
+            color: var(--danger-hover);
         }
 
         /* ===== AUTH OVERLAY ===== */
@@ -858,6 +979,12 @@
             .dashboard-card {
                 padding: 16px;
             }
+            .volunteer-card .btn-group {
+                flex-direction: column;
+            }
+            .volunteer-card .btn-group button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -886,7 +1013,7 @@
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fas fa-moon"></i>
             </button>
-            <button class="btn-nav" onclick="openModal()">New Session</button>
+            <button class="btn-nav" onclick="openModal('session')">New Session</button>
         </div>
     </header>
 
@@ -974,7 +1101,7 @@
         <section id="sessions">
             <div class="section-header">
                 <h2>📋 Active <span>Sessions</span></h2>
-                <button class="btn-add" onclick="openModal()">+ Add</button>
+                <button class="btn-add" onclick="openModal('session')">+ Add</button>
             </div>
             <div class="sessions-grid" id="sessionsGrid">
                 <!-- Rendered by JS -->
@@ -995,6 +1122,7 @@
         <section id="volunteers">
             <div class="section-header">
                 <h2>🌟 Volunteers <span>& XP</span></h2>
+                <button class="btn-add" onclick="openModal('volunteer')">+ Add Volunteer</button>
             </div>
             <div class="volunteer-grid" id="volunteerGrid">
                 <!-- Rendered by JS -->
@@ -1006,28 +1134,10 @@
         </footer>
     </div>
 
-    <!-- ===== MODAL ===== -->
-    <div class="modal" id="sessionModal">
-        <div class="modal-content">
-            <h2>New Session</h2>
-            <label>Session Name</label>
-            <input type="text" id="sessionName" placeholder="e.g. Waste Management" />
-
-            <label>Category</label>
-            <select id="sessionCategory">
-                <option value="Waste">Waste</option>
-                <option value="Climate">Climate</option>
-                <option value="Energy">Energy</option>
-                <option value="Biodiversity">Biodiversity</option>
-            </select>
-
-            <label>Description</label>
-            <input type="text" id="sessionDesc" placeholder="Brief description" />
-
-            <div class="modal-actions">
-                <button class="btn-confirm" onclick="addSession()">Add</button>
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-            </div>
+    <!-- ===== MODAL (Dynamic) ===== -->
+    <div class="modal" id="dynamicModal">
+        <div class="modal-content" id="modalContent">
+            <!-- Rendered by JS -->
         </div>
     </div>
 
@@ -1130,7 +1240,11 @@
             mentor: 'Islam',
             xp: 450,
             tasksDone: 3,
-            tasksTotal: 5
+            tasksTotal: 5,
+            portfolio: [
+                { title: 'Waste Sorting Campaign', description: 'Led community sorting event', status: 'completed' },
+                { title: 'Recycling Workshop', description: 'Conducted training for 20 people', status: 'pending' }
+            ]
         }, {
             id: 2,
             name: 'Gidaa',
@@ -1138,7 +1252,10 @@
             mentor: 'Shahnda',
             xp: 320,
             tasksDone: 2,
-            tasksTotal: 4
+            tasksTotal: 4,
+            portfolio: [
+                { title: 'Climate Awareness', description: 'School presentation on climate change', status: 'completed' }
+            ]
         }, {
             id: 3,
             name: 'Sohaila',
@@ -1146,7 +1263,8 @@
             mentor: 'Shahnda',
             xp: 280,
             tasksDone: 1,
-            tasksTotal: 4
+            tasksTotal: 4,
+            portfolio: []
         }, {
             id: 4,
             name: 'Yamani',
@@ -1154,7 +1272,12 @@
             mentor: 'Mariam',
             xp: 510,
             tasksDone: 4,
-            tasksTotal: 5
+            tasksTotal: 5,
+            portfolio: [
+                { title: 'Solar Panel Installation', description: 'Installed solar panels at community center',
+                    status: 'completed' },
+                { title: 'Energy Audit', description: 'Conducted energy audit for 10 homes', status: 'completed' }
+            ]
         }, {
             id: 5,
             name: 'Rahma',
@@ -1162,7 +1285,8 @@
             mentor: 'Mariam',
             xp: 390,
             tasksDone: 3,
-            tasksTotal: 5
+            tasksTotal: 5,
+            portfolio: []
         }, {
             id: 6,
             name: 'Yasmin',
@@ -1170,7 +1294,8 @@
             mentor: 'Jessica',
             xp: 210,
             tasksDone: 1,
-            tasksTotal: 4
+            tasksTotal: 4,
+            portfolio: []
         }, {
             id: 7,
             name: 'Youstina',
@@ -1178,7 +1303,10 @@
             mentor: 'Jessica',
             xp: 340,
             tasksDone: 2,
-            tasksTotal: 4
+            tasksTotal: 4,
+            portfolio: [
+                { title: 'Plastic Collection Drive', description: 'Collected 50kg of plastic', status: 'completed' }
+            ]
         }, {
             id: 8,
             name: 'Omar',
@@ -1186,7 +1314,11 @@
             mentor: 'Adham',
             xp: 470,
             tasksDone: 3,
-            tasksTotal: 5
+            tasksTotal: 5,
+            portfolio: [
+                { title: 'Tree Planting', description: 'Planted 100 trees in park', status: 'completed' },
+                { title: 'Wildlife Survey', description: 'Documented local species', status: 'pending' }
+            ]
         }, {
             id: 9,
             name: 'Rodina',
@@ -1194,7 +1326,8 @@
             mentor: 'Genny',
             xp: 300,
             tasksDone: 2,
-            tasksTotal: 4
+            tasksTotal: 4,
+            portfolio: []
         }, {
             id: 10,
             name: 'Kady',
@@ -1202,7 +1335,8 @@
             mentor: 'Mahinour',
             xp: 260,
             tasksDone: 1,
-            tasksTotal: 4
+            tasksTotal: 4,
+            portfolio: []
         }, {
             id: 11,
             name: 'Mariam',
@@ -1210,8 +1344,14 @@
             mentor: 'Kamilya',
             xp: 580,
             tasksDone: 4,
-            tasksTotal: 5
+            tasksTotal: 5,
+            portfolio: [
+                { title: 'Conservation Project', description: 'Protected wetland area', status: 'completed' },
+                { title: 'Species Research', description: 'Published research on local birds', status: 'completed' }
+            ]
         }];
+
+        let volunteerIdCounter = 12;
 
         // ============================================================
         // RENDER
@@ -1255,6 +1395,7 @@
             const grid = document.getElementById('volunteerGrid');
             grid.innerHTML = volunteers.map(v => {
                 const pct = Math.round((v.tasksDone / v.tasksTotal) * 100);
+                const portfolioCount = v.portfolio ? v.portfolio.length : 0;
                 return `
                             <div class="volunteer-card">
                                 <div class="vheader">
@@ -1262,6 +1403,7 @@
                                         ${v.name}
                                         <span class="badge">${v.xp} XP</span>
                                     </div>
+                                    <span style="font-size:0.6rem;color:var(--text-muted);">📁 ${portfolioCount}</span>
                                 </div>
                                 <div class="vcategory">${v.category}</div>
                                 <div class="vmentor">Mentor: ${v.mentor}</div>
@@ -1272,9 +1414,12 @@
                                 <div class="progress-bar">
                                     <div class="fill" style="width:${pct}%;"></div>
                                 </div>
-                                <div>
+                                <div class="btn-group">
                                     <button class="btn-task" onclick="completeTask(${v.id})">Complete Task</button>
                                     <button class="btn-task-xp" onclick="addXP(${v.id})">+10 XP</button>
+                                    <button class="btn-task-xp" onclick="removeXP(${v.id})">-10 XP</button>
+                                    <button class="btn-edit" onclick="openModal('editVolunteer', ${v.id})">Edit</button>
+                                    <button class="btn-portfolio" onclick="openModal('portfolio', ${v.id})">📁 Portfolio</button>
                                 </div>
                             </div>
                         `;
@@ -1292,7 +1437,6 @@
         // ============================================================
 
         function updateDashboard() {
-            // Stats
             document.getElementById('totalSessions').textContent = sessions.length;
             document.getElementById('totalVolunteers').textContent = volunteers.length;
 
@@ -1301,13 +1445,11 @@
             const pct = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
             document.getElementById('avgProgress').textContent = pct + '%';
 
-            // Chart
             const circumference = 2 * Math.PI * 58;
             const offset = circumference - (pct / 100) * circumference;
             document.getElementById('chartProgress').style.strokeDasharray = `${circumference - offset} ${circumference}`;
             document.getElementById('chartPercent').textContent = pct + '%';
 
-            // Quick stats
             document.getElementById('completedTasks').textContent = doneTasks;
             document.getElementById('pendingTasks').textContent = totalTasks - doneTasks;
             const totalXP = volunteers.reduce((sum, v) => sum + v.xp, 0);
@@ -1359,45 +1501,6 @@
         }
 
         // ============================================================
-        // MODAL
-        // ============================================================
-
-        function openModal() {
-            document.getElementById('sessionModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('sessionModal').classList.remove('active');
-            document.getElementById('sessionName').value = '';
-            document.getElementById('sessionDesc').value = '';
-        }
-
-        function addSession() {
-            const name = document.getElementById('sessionName').value.trim();
-            const category = document.getElementById('sessionCategory').value;
-            const description = document.getElementById('sessionDesc').value.trim();
-
-            if (!name) {
-                alert('Please enter a session name.');
-                return;
-            }
-
-            sessions.push({
-                id: sessionIdCounter++,
-                name: name,
-                category: category,
-                description: description || 'No description',
-                timer: 0,
-                timerInterval: null,
-                isRunning: false
-            });
-
-            closeModal();
-            renderSessions();
-            updateDashboard();
-        }
-
-        // ============================================================
         // VOLUNTEER ACTIONS
         // ============================================================
 
@@ -1422,14 +1525,269 @@
             updateDashboard();
         }
 
+        function removeXP(id) {
+            const v = volunteers.find(vol => vol.id === id);
+            if (!v) return;
+            if (v.xp >= 10) {
+                v.xp -= 10;
+            } else {
+                v.xp = 0;
+            }
+            renderVolunteers();
+            updateDashboard();
+        }
+
+        // ============================================================
+        // MODAL SYSTEM
+        // ============================================================
+
+        function openModal(type, id = null) {
+            const modal = document.getElementById('dynamicModal');
+            const content = document.getElementById('modalContent');
+
+            if (type === 'session') {
+                content.innerHTML = `
+                            <h2>New Session</h2>
+                            <label>Session Name</label>
+                            <input type="text" id="modalSessionName" placeholder="e.g. Waste Management" />
+                            <label>Category</label>
+                            <select id="modalSessionCategory">
+                                ${categoryOptions.map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
+                            <label>Description</label>
+                            <input type="text" id="modalSessionDesc" placeholder="Brief description" />
+                            <div class="modal-actions">
+                                <button class="btn-confirm" onclick="addSessionFromModal()">Add</button>
+                                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                            </div>
+                        `;
+            } else if (type === 'volunteer') {
+                content.innerHTML = `
+                            <h2>New Volunteer</h2>
+                            <label>Name</label>
+                            <input type="text" id="modalVolName" placeholder="Full name" />
+                            <label>Category</label>
+                            <select id="modalVolCategory">
+                                ${categoryOptions.map(c => `<option value="${c}">${c}</option>`).join('')}
+                            </select>
+                            <label>Mentor</label>
+                            <select id="modalVolMentor">
+                                ${team.map(t => `<option value="${t.name}">${t.name}</option>`).join('')}
+                            </select>
+                            <label>Tasks Total</label>
+                            <input type="number" id="modalVolTasks" value="5" min="1" max="10" />
+                            <div class="modal-actions">
+                                <button class="btn-confirm" onclick="addVolunteerFromModal()">Add</button>
+                                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                            </div>
+                        `;
+            } else if (type === 'editVolunteer') {
+                const v = volunteers.find(vol => vol.id === id);
+                if (!v) return;
+                content.innerHTML = `
+                            <h2>Edit Volunteer</h2>
+                            <label>Name</label>
+                            <input type="text" id="modalEditName" value="${v.name}" />
+                            <label>Category</label>
+                            <select id="modalEditCategory">
+                                ${categoryOptions.map(c => `<option value="${c}" ${c === v.category ? 'selected' : ''}>${c}</option>`).join('')}
+                            </select>
+                            <label>Mentor</label>
+                            <select id="modalEditMentor">
+                                ${team.map(t => `<option value="${t.name}" ${t.name === v.mentor ? 'selected' : ''}>${t.name}</option>`).join('')}
+                            </select>
+                            <label>XP</label>
+                            <input type="number" id="modalEditXP" value="${v.xp}" min="0" />
+                            <label>Tasks Done</label>
+                            <input type="number" id="modalEditDone" value="${v.tasksDone}" min="0" max="${v.tasksTotal}" />
+                            <label>Tasks Total</label>
+                            <input type="number" id="modalEditTotal" value="${v.tasksTotal}" min="1" max="10" />
+                            <div class="modal-actions">
+                                <button class="btn-confirm" onclick="editVolunteerFromModal(${v.id})">Save</button>
+                                <button class="btn-danger" onclick="deleteVolunteer(${v.id})">Delete</button>
+                                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                            </div>
+                        `;
+            } else if (type === 'portfolio') {
+                const v = volunteers.find(vol => vol.id === id);
+                if (!v) return;
+                const items = v.portfolio || [];
+                content.innerHTML = `
+                            <h2>📁 Portfolio — ${v.name} <span class="sub">(${v.xp} XP)</span></h2>
+                            <div style="margin:12px 0;">
+                                ${items.length === 0 ? '<p style="color:var(--text-secondary);font-size:0.8rem;">No portfolio items yet.</p>' :
+                                items.map((p, idx) => `
+                                    <div class="portfolio-item">
+                                        <div>
+                                            <div class="p-title">${p.title}</div>
+                                            <div class="p-desc">${p.description}</div>
+                                        </div>
+                                        <div style="display:flex;align-items:center;gap:8px;">
+                                            <span class="p-status ${p.status}">${p.status}</span>
+                                            <button class="btn-p-delete" onclick="deletePortfolioItem(${v.id}, ${idx})">×</button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <hr style="border-color:var(--border-color);margin:12px 0;" />
+                            <label>Add Project</label>
+                            <input type="text" id="modalPortTitle" placeholder="Project title" />
+                            <label>Description</label>
+                            <input type="text" id="modalPortDesc" placeholder="Brief description" />
+                            <label>Status</label>
+                            <select id="modalPortStatus">
+                                <option value="completed">Completed</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                            <div class="modal-actions">
+                                <button class="btn-confirm" onclick="addPortfolioItem(${v.id})">Add Project</button>
+                                <button class="btn-cancel" onclick="closeModal()">Close</button>
+                            </div>
+                        `;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('dynamicModal').classList.remove('active');
+        }
+
+        // ============================================================
+        // MODAL ACTIONS
+        // ============================================================
+
+        function addSessionFromModal() {
+            const name = document.getElementById('modalSessionName').value.trim();
+            const category = document.getElementById('modalSessionCategory').value;
+            const description = document.getElementById('modalSessionDesc').value.trim();
+
+            if (!name) {
+                alert('Please enter a session name.');
+                return;
+            }
+
+            sessions.push({
+                id: sessionIdCounter++,
+                name: name,
+                category: category,
+                description: description || 'No description',
+                timer: 0,
+                timerInterval: null,
+                isRunning: false
+            });
+
+            closeModal();
+            renderSessions();
+            updateDashboard();
+        }
+
+        function addVolunteerFromModal() {
+            const name = document.getElementById('modalVolName').value.trim();
+            const category = document.getElementById('modalVolCategory').value;
+            const mentor = document.getElementById('modalVolMentor').value;
+            const tasksTotal = parseInt(document.getElementById('modalVolTasks').value) || 5;
+
+            if (!name) {
+                alert('Please enter a volunteer name.');
+                return;
+            }
+
+            volunteers.push({
+                id: volunteerIdCounter++,
+                name: name,
+                category: category,
+                mentor: mentor,
+                xp: 0,
+                tasksDone: 0,
+                tasksTotal: tasksTotal,
+                portfolio: []
+            });
+
+            closeModal();
+            renderVolunteers();
+            updateDashboard();
+        }
+
+        function editVolunteerFromModal(id) {
+            const v = volunteers.find(vol => vol.id === id);
+            if (!v) return;
+
+            const name = document.getElementById('modalEditName').value.trim();
+            const category = document.getElementById('modalEditCategory').value;
+            const mentor = document.getElementById('modalEditMentor').value;
+            const xp = parseInt(document.getElementById('modalEditXP').value) || 0;
+            const tasksDone = parseInt(document.getElementById('modalEditDone').value) || 0;
+            const tasksTotal = parseInt(document.getElementById('modalEditTotal').value) || 1;
+
+            if (!name) {
+                alert('Please enter a name.');
+                return;
+            }
+
+            v.name = name;
+            v.category = category;
+            v.mentor = mentor;
+            v.xp = xp;
+            v.tasksDone = Math.min(tasksDone, tasksTotal);
+            v.tasksTotal = tasksTotal;
+
+            closeModal();
+            renderVolunteers();
+            updateDashboard();
+        }
+
+        function deleteVolunteer(id) {
+            if (!confirm('Delete this volunteer permanently?')) return;
+            volunteers = volunteers.filter(v => v.id !== id);
+            closeModal();
+            renderVolunteers();
+            updateDashboard();
+        }
+
+        // ============================================================
+        // PORTFOLIO ACTIONS
+        // ============================================================
+
+        function addPortfolioItem(id) {
+            const v = volunteers.find(vol => vol.id === id);
+            if (!v) return;
+
+            const title = document.getElementById('modalPortTitle').value.trim();
+            const description = document.getElementById('modalPortDesc').value.trim();
+            const status = document.getElementById('modalPortStatus').value;
+
+            if (!title) {
+                alert('Please enter a project title.');
+                return;
+            }
+
+            if (!v.portfolio) v.portfolio = [];
+            v.portfolio.push({ title, description: description || 'No description', status });
+
+            // Re-render portfolio modal
+            closeModal();
+            openModal('portfolio', id);
+            renderVolunteers();
+            updateDashboard();
+        }
+
+        function deletePortfolioItem(volId, itemIndex) {
+            if (!confirm('Delete this portfolio item?')) return;
+            const v = volunteers.find(vol => vol.id === volId);
+            if (!v || !v.portfolio) return;
+            v.portfolio.splice(itemIndex, 1);
+            closeModal();
+            openModal('portfolio', volId);
+            renderVolunteers();
+            updateDashboard();
+        }
+
         // ============================================================
         // INIT
         // ============================================================
 
         renderAll();
-
-        // Auto-hide auth if already authenticated (for reload)
-        // (Keep auth active on load)
 
         console.log('🚀 CTG Dashboard loaded successfully!');
         console.log('🔑 Password: ctg2026');

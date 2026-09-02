@@ -896,6 +896,28 @@
             display: block;
         }
 
+        /* ===== SAVE INDICATOR ===== */
+        .save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 3000;
+            pointer-events: none;
+        }
+        .save-indicator.show {
+            opacity: 1;
+        }
+
         /* ===== FOOTER ===== */
         footer {
             text-align: center;
@@ -1000,6 +1022,9 @@
             <div class="error" id="authError">Invalid password. Please try again.</div>
         </div>
     </div>
+
+    <!-- ===== SAVE INDICATOR ===== -->
+    <div class="save-indicator" id="saveIndicator">✅ Saved</div>
 
     <!-- ===== HEADER ===== -->
     <header>
@@ -1143,6 +1168,65 @@
 
     <script>
         // ============================================================
+        // LOCAL STORAGE HELPERS
+        // ============================================================
+
+        const STORAGE_KEY = 'ctg_data';
+
+        function saveData() {
+            const data = {
+                sessions: sessions,
+                volunteers: volunteers,
+                sessionIdCounter: sessionIdCounter,
+                volunteerIdCounter: volunteerIdCounter
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showSaveIndicator();
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    sessions = data.sessions || sessions;
+                    volunteers = data.volunteers || volunteers;
+                    sessionIdCounter = data.sessionIdCounter || sessionIdCounter;
+                    volunteerIdCounter = data.volunteerIdCounter || volunteerIdCounter;
+
+                    // Rebuild timer intervals for sessions that were running
+                    sessions.forEach(s => {
+                        if (s.isRunning) {
+                            s.timerInterval = setInterval(() => {
+                                s.timer++;
+                                const el = document.getElementById(`timer-${s.id}`);
+                                if (el) el.textContent = formatTime(s.timer);
+                            }, 1000);
+                        }
+                    });
+                    return true;
+                } catch (e) {
+                    console.warn('Failed to load saved data, using defaults.');
+                }
+            }
+            return false;
+        }
+
+        function showSaveIndicator() {
+            const el = document.getElementById('saveIndicator');
+            el.classList.add('show');
+            clearTimeout(el._timeout);
+            el._timeout = setTimeout(() => {
+                el.classList.remove('show');
+            }, 1500);
+        }
+
+        // Auto-save after any change
+        function autoSave() {
+            saveData();
+        }
+
+        // ============================================================
         // AUTH
         // ============================================================
 
@@ -1155,6 +1239,9 @@
                 document.getElementById('authOverlay').classList.add('hidden');
                 error.classList.remove('show');
                 document.body.style.overflow = 'auto';
+                // Load data after auth
+                loadData();
+                renderAll();
             } else {
                 error.classList.add('show');
                 input.value = '';
@@ -1175,6 +1262,16 @@
         function toggleTheme() {
             isDark = !isDark;
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('ctg_theme', isDark ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('ctg_theme');
+        if (savedTheme) {
+            isDark = savedTheme === 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
             const icon = document.querySelector('.theme-toggle i');
             icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
         }
@@ -1479,6 +1576,7 @@
             }
             renderSessions();
             updateDashboard();
+            autoSave();
         }
 
         function resetTimer(id) {
@@ -1489,6 +1587,7 @@
             session.timer = 0;
             renderSessions();
             updateDashboard();
+            autoSave();
         }
 
         function deleteSession(id) {
@@ -1498,6 +1597,7 @@
             sessions = sessions.filter(s => s.id !== id);
             renderSessions();
             updateDashboard();
+            autoSave();
         }
 
         // ============================================================
@@ -1512,6 +1612,7 @@
                 v.xp += 15;
                 renderVolunteers();
                 updateDashboard();
+                autoSave();
             } else {
                 alert('All tasks completed!');
             }
@@ -1523,6 +1624,7 @@
             v.xp += 10;
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         function removeXP(id) {
@@ -1535,6 +1637,7 @@
             }
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         // ============================================================
@@ -1680,6 +1783,7 @@
             closeModal();
             renderSessions();
             updateDashboard();
+            autoSave();
         }
 
         function addVolunteerFromModal() {
@@ -1707,6 +1811,7 @@
             closeModal();
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         function editVolunteerFromModal(id) {
@@ -1735,6 +1840,7 @@
             closeModal();
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         function deleteVolunteer(id) {
@@ -1743,6 +1849,7 @@
             closeModal();
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         // ============================================================
@@ -1769,6 +1876,7 @@
             openModal('portfolio', id);
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         function deletePortfolioItem(volId, itemIndex) {
@@ -1780,16 +1888,24 @@
             openModal('portfolio', volId);
             renderVolunteers();
             updateDashboard();
+            autoSave();
         }
 
         // ============================================================
         // INIT
         // ============================================================
 
+        // Try to load data, if none exists, save defaults
+        if (!loadData()) {
+            // Save initial data for first time
+            saveData();
+        }
+
         renderAll();
 
         console.log('🚀 CTG Dashboard loaded successfully!');
         console.log('🔑 Password: ctg2026');
+        console.log('💾 Data is automatically saved to LocalStorage.');
     </script>
 
 </body>

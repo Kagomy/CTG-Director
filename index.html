@@ -1227,8 +1227,8 @@
             { name: 'Shahnda', role: 'Trainer' },
             { name: 'Mariam', role: 'Trainer' },
             { name: 'Adham', role: 'Trainer' },
-            { name: 'Genny', role: 'Trainer' },
-            { name: 'Mahinour', role: 'Trainer' }
+            { name: 'Jana', role: 'Trainer' },
+            { name: 'Mahy', role: 'Trainer' }
         ];
 
         const categoryOptions = ['Waste', 'Climate', 'Energy', 'Biodiversity'];
@@ -1323,7 +1323,7 @@
             id: 9,
             name: 'Rodina',
             category: 'Biodiversity',
-            mentor: 'Genny',
+            mentor: 'Jana',
             xp: 300,
             tasksDone: 2,
             tasksTotal: 4,
@@ -1332,7 +1332,7 @@
             id: 10,
             name: 'Kady',
             category: 'Climate',
-            mentor: 'Mahinour',
+            mentor: 'Mahy',
             xp: 260,
             tasksDone: 1,
             tasksTotal: 4,
@@ -1765,7 +1765,6 @@
             if (!v.portfolio) v.portfolio = [];
             v.portfolio.push({ title, description: description || 'No description', status });
 
-            // Re-render portfolio modal
             closeModal();
             openModal('portfolio', id);
             renderVolunteers();

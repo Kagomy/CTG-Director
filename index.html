@@ -918,6 +918,25 @@
             opacity: 1;
         }
 
+        /* ===== RESET BUTTON ===== */
+        .btn-reset {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 6px 18px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-reset:hover {
+            background: var(--danger);
+            color: var(--bg-primary);
+        }
+
         /* ===== FOOTER ===== */
         footer {
             text-align: center;
@@ -1039,6 +1058,7 @@
                 <i class="fas fa-moon"></i>
             </button>
             <button class="btn-nav" onclick="openModal('session')">New Session</button>
+            <button class="btn-reset" onclick="resetAllData()">↺ Reset Data</button>
         </div>
     </header>
 
@@ -1189,10 +1209,10 @@
             if (stored) {
                 try {
                     const data = JSON.parse(stored);
-                    sessions = data.sessions || sessions;
-                    volunteers = data.volunteers || volunteers;
-                    sessionIdCounter = data.sessionIdCounter || sessionIdCounter;
-                    volunteerIdCounter = data.volunteerIdCounter || volunteerIdCounter;
+                    sessions = data.sessions || getDefaultSessions();
+                    volunteers = data.volunteers || getDefaultVolunteers();
+                    sessionIdCounter = data.sessionIdCounter || 5;
+                    volunteerIdCounter = data.volunteerIdCounter || 12;
 
                     // Rebuild timer intervals for sessions that were running
                     sessions.forEach(s => {
@@ -1221,9 +1241,37 @@
             }, 1500);
         }
 
-        // Auto-save after any change
         function autoSave() {
             saveData();
+        }
+
+        // ============================================================
+        // DEFAULT DATA (RESET TO ZERO)
+        // ============================================================
+
+        function getDefaultSessions() {
+            return [
+                { id: 1, name: 'Waste Management Workshop', category: 'Waste', description: 'Reduce, reuse, recycle — practical solutions.', timer: 0, timerInterval: null, isRunning: false },
+                { id: 2, name: 'Climate Action Summit', category: 'Climate', description: 'Policy discussions and community action.', timer: 0, timerInterval: null, isRunning: false },
+                { id: 3, name: 'Renewable Energy Expo', category: 'Energy', description: 'Solar, wind, and green innovations.', timer: 0, timerInterval: null, isRunning: false },
+                { id: 4, name: 'Biodiversity Conservation', category: 'Biodiversity', description: 'Ecosystem and wildlife protection.', timer: 0, timerInterval: null, isRunning: false }
+            ];
+        }
+
+        function getDefaultVolunteers() {
+            return [
+                { id: 1, name: 'Aser', category: 'Waste', mentor: 'Islam', xp: 0, tasksDone: 0, tasksTotal: 5, portfolio: [] },
+                { id: 2, name: 'Gidaa', category: 'Climate', mentor: 'Shahnda', xp: 0, tasksDone: 0, tasksTotal: 4, portfolio: [] },
+                { id: 3, name: 'Sohaila', category: 'Climate', mentor: 'Shahnda', xp: 0, tasksDone: 0, tasksTotal: 4, portfolio: [] },
+                { id: 4, name: 'Yamani', category: 'Energy', mentor: 'Mariam', xp: 0, tasksDone: 0, tasksTotal: 5, portfolio: [] },
+                { id: 5, name: 'Rahma', category: 'Energy', mentor: 'Mariam', xp: 0, tasksDone: 0, tasksTotal: 5, portfolio: [] },
+                { id: 6, name: 'Yasmin', category: 'Waste', mentor: 'Jessica', xp: 0, tasksDone: 0, tasksTotal: 4, portfolio: [] },
+                { id: 7, name: 'Youstina', category: 'Waste', mentor: 'Jessica', xp: 0, tasksDone: 0, tasksTotal: 4, portfolio: [] },
+                { id: 8, name: 'Omar', category: 'Biodiversity', mentor: 'Adham', xp: 0, tasksDone: 0, tasksTotal: 5, portfolio: [] },
+                { id: 9, name: 'Rodina', category: 'Biodiversity', mentor: 'Jana', xp: 0, tasksDone: 0, tasksTotal: 4, portfolio: [] },
+                { id: 10, name: 'Kady', category: 'Climate', mentor: 'Mahy', xp: 0, tasksDone: 0, tasksTotal: 4, portfolio: [] },
+                { id: 11, name: 'Mariam', category: 'Biodiversity', mentor: 'Kamilya', xp: 0, tasksDone: 0, tasksTotal: 5, portfolio: [] }
+            ];
         }
 
         // ============================================================
@@ -1240,7 +1288,15 @@
                 error.classList.remove('show');
                 document.body.style.overflow = 'auto';
                 // Load data after auth
-                loadData();
+                const loaded = loadData();
+                if (!loaded) {
+                    // First time - save defaults
+                    sessions = getDefaultSessions();
+                    volunteers = getDefaultVolunteers();
+                    sessionIdCounter = 5;
+                    volunteerIdCounter = 12;
+                    saveData();
+                }
                 renderAll();
             } else {
                 error.classList.add('show');
@@ -1277,45 +1333,37 @@
         }
 
         // ============================================================
+        // RESET ALL DATA
+        // ============================================================
+
+        function resetAllData() {
+            if (!confirm('⚠️ Are you sure? This will delete ALL data and reset everything to zero!')) return;
+            if (!confirm('⚠️ All XP, tasks, portfolio items will be lost. Continue?')) return;
+
+            // Clear all timers
+            sessions.forEach(s => {
+                if (s.timerInterval) clearInterval(s.timerInterval);
+                s.isRunning = false;
+                s.timer = 0;
+            });
+
+            // Reset to default data
+            sessions = getDefaultSessions();
+            volunteers = getDefaultVolunteers();
+            sessionIdCounter = 5;
+            volunteerIdCounter = 12;
+
+            saveData();
+            renderAll();
+            alert('✅ All data has been reset to zero!');
+        }
+
+        // ============================================================
         // DATA
         // ============================================================
 
-        let sessions = [{
-            id: 1,
-            name: 'Waste Management Workshop',
-            category: 'Waste',
-            description: 'Reduce, reuse, recycle — practical solutions.',
-            timer: 0,
-            timerInterval: null,
-            isRunning: false
-        }, {
-            id: 2,
-            name: 'Climate Action Summit',
-            category: 'Climate',
-            description: 'Policy discussions and community action.',
-            timer: 0,
-            timerInterval: null,
-            isRunning: false
-        }, {
-            id: 3,
-            name: 'Renewable Energy Expo',
-            category: 'Energy',
-            description: 'Solar, wind, and green innovations.',
-            timer: 0,
-            timerInterval: null,
-            isRunning: false
-        }, {
-            id: 4,
-            name: 'Biodiversity Conservation',
-            category: 'Biodiversity',
-            description: 'Ecosystem and wildlife protection.',
-            timer: 0,
-            timerInterval: null,
-            isRunning: false
-        }];
-
+        let sessions = [];
         let sessionIdCounter = 5;
-
         const team = [
             { name: 'Youssef El-Banna', role: 'Founder' },
             { name: 'Kamilya Sherif', role: 'Executive Director' },
@@ -1329,125 +1377,7 @@
         ];
 
         const categoryOptions = ['Waste', 'Climate', 'Energy', 'Biodiversity'];
-
-        let volunteers = [{
-            id: 1,
-            name: 'Aser',
-            category: 'Waste',
-            mentor: 'Islam',
-            xp: 450,
-            tasksDone: 3,
-            tasksTotal: 5,
-            portfolio: [
-                { title: 'Waste Sorting Campaign', description: 'Led community sorting event', status: 'completed' },
-                { title: 'Recycling Workshop', description: 'Conducted training for 20 people', status: 'pending' }
-            ]
-        }, {
-            id: 2,
-            name: 'Gidaa',
-            category: 'Climate',
-            mentor: 'Shahnda',
-            xp: 320,
-            tasksDone: 2,
-            tasksTotal: 4,
-            portfolio: [
-                { title: 'Climate Awareness', description: 'School presentation on climate change', status: 'completed' }
-            ]
-        }, {
-            id: 3,
-            name: 'Sohaila',
-            category: 'Climate',
-            mentor: 'Shahnda',
-            xp: 280,
-            tasksDone: 1,
-            tasksTotal: 4,
-            portfolio: []
-        }, {
-            id: 4,
-            name: 'Yamani',
-            category: 'Energy',
-            mentor: 'Mariam',
-            xp: 510,
-            tasksDone: 4,
-            tasksTotal: 5,
-            portfolio: [
-                { title: 'Solar Panel Installation', description: 'Installed solar panels at community center',
-                    status: 'completed' },
-                { title: 'Energy Audit', description: 'Conducted energy audit for 10 homes', status: 'completed' }
-            ]
-        }, {
-            id: 5,
-            name: 'Rahma',
-            category: 'Energy',
-            mentor: 'Mariam',
-            xp: 390,
-            tasksDone: 3,
-            tasksTotal: 5,
-            portfolio: []
-        }, {
-            id: 6,
-            name: 'Yasmin',
-            category: 'Waste',
-            mentor: 'Jessica',
-            xp: 210,
-            tasksDone: 1,
-            tasksTotal: 4,
-            portfolio: []
-        }, {
-            id: 7,
-            name: 'Youstina',
-            category: 'Waste',
-            mentor: 'Jessica',
-            xp: 340,
-            tasksDone: 2,
-            tasksTotal: 4,
-            portfolio: [
-                { title: 'Plastic Collection Drive', description: 'Collected 50kg of plastic', status: 'completed' }
-            ]
-        }, {
-            id: 8,
-            name: 'Omar',
-            category: 'Biodiversity',
-            mentor: 'Adham',
-            xp: 470,
-            tasksDone: 3,
-            tasksTotal: 5,
-            portfolio: [
-                { title: 'Tree Planting', description: 'Planted 100 trees in park', status: 'completed' },
-                { title: 'Wildlife Survey', description: 'Documented local species', status: 'pending' }
-            ]
-        }, {
-            id: 9,
-            name: 'Rodina',
-            category: 'Biodiversity',
-            mentor: 'Jana',
-            xp: 300,
-            tasksDone: 2,
-            tasksTotal: 4,
-            portfolio: []
-        }, {
-            id: 10,
-            name: 'Kady',
-            category: 'Climate',
-            mentor: 'Mahy',
-            xp: 260,
-            tasksDone: 1,
-            tasksTotal: 4,
-            portfolio: []
-        }, {
-            id: 11,
-            name: 'Mariam',
-            category: 'Biodiversity',
-            mentor: 'Kamilya',
-            xp: 580,
-            tasksDone: 4,
-            tasksTotal: 5,
-            portfolio: [
-                { title: 'Conservation Project', description: 'Protected wetland area', status: 'completed' },
-                { title: 'Species Research', description: 'Published research on local birds', status: 'completed' }
-            ]
-        }];
-
+        let volunteers = [];
         let volunteerIdCounter = 12;
 
         // ============================================================
@@ -1491,7 +1421,7 @@
         function renderVolunteers() {
             const grid = document.getElementById('volunteerGrid');
             grid.innerHTML = volunteers.map(v => {
-                const pct = Math.round((v.tasksDone / v.tasksTotal) * 100);
+                const pct = v.tasksTotal > 0 ? Math.round((v.tasksDone / v.tasksTotal) * 100) : 0;
                 const portfolioCount = v.portfolio ? v.portfolio.length : 0;
                 return `
                             <div class="volunteer-card">
@@ -1896,8 +1826,12 @@
         // ============================================================
 
         // Try to load data, if none exists, save defaults
-        if (!loadData()) {
-            // Save initial data for first time
+        const loaded = loadData();
+        if (!loaded) {
+            sessions = getDefaultSessions();
+            volunteers = getDefaultVolunteers();
+            sessionIdCounter = 5;
+            volunteerIdCounter = 12;
             saveData();
         }
 
@@ -1906,6 +1840,7 @@
         console.log('🚀 CTG Dashboard loaded successfully!');
         console.log('🔑 Password: ctg2026');
         console.log('💾 Data is automatically saved to LocalStorage.');
+        console.log('↺ All XP and tasks start from ZERO!');
     </script>
 
 </body>

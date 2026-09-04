@@ -23,12 +23,10 @@
             --accent: #1e7a2e;
             --accent-hover: #2a9a3e;
             --accent-light: rgba(30, 122, 46, 0.08);
-            --accent-glow: rgba(30, 122, 46, 0.15);
             --shadow: rgba(0, 0, 0, 0.4);
             --danger: #5a2a2a;
             --danger-hover: #8a3a3a;
             --warning: #b87a2a;
-            --success: #1e7a2e;
             --radius: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -45,7 +43,6 @@
             --border-hover: rgba(30, 122, 46, 0.25);
             --shadow: rgba(0, 0, 0, 0.06);
             --accent-light: rgba(30, 122, 46, 0.06);
-            --accent-glow: rgba(30, 122, 46, 0.1);
         }
 
         /* ===== RESET ===== */
@@ -168,7 +165,7 @@
             min-height: 100vh;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== TOP HEADER ===== */
         .top-header {
             display: flex;
             justify-content: space-between;
@@ -195,6 +192,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .btn-theme {
@@ -275,14 +273,6 @@
             letter-spacing: 1px;
             color: var(--text-secondary);
             font-weight: 600;
-        }
-        .dash-card .card-header .value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-        .dash-card .card-header .value span {
-            color: var(--accent);
         }
 
         /* ===== PROGRESS CIRCLE ===== */
@@ -666,6 +656,112 @@
             color: var(--accent);
         }
 
+        /* ===== PORTFOLIO ===== */
+        .portfolio-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        .portfolio-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .portfolio-item .p-info {
+            flex: 1;
+            min-width: 150px;
+        }
+        .portfolio-item .p-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        .portfolio-item .p-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .portfolio-item .p-type {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 2px 10px;
+            border-radius: 3px;
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .portfolio-item .p-type.image {
+            background: rgba(30, 122, 46, 0.12);
+            color: var(--accent);
+        }
+        .portfolio-item .p-type.file {
+            background: rgba(184, 122, 42, 0.12);
+            color: var(--warning);
+        }
+        .portfolio-item .p-type.link {
+            background: rgba(30, 122, 46, 0.08);
+            color: var(--accent);
+        }
+
+        .portfolio-item .p-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .portfolio-item .p-actions a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        .portfolio-item .p-actions a:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .portfolio-item .p-actions .btn-p-delete {
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            transition: var(--transition);
+        }
+        .portfolio-item .p-actions .btn-p-delete:hover {
+            color: var(--danger-hover);
+        }
+
+        .portfolio-item .p-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+        .portfolio-item .p-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .portfolio-item .p-preview i {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
         /* ===== MODAL ===== */
         .modal {
             display: none;
@@ -689,7 +785,7 @@
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             padding: 28px 32px;
-            max-width: 500px;
+            max-width: 560px;
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
@@ -704,6 +800,14 @@
             color: var(--text-primary);
             margin-bottom: 16px;
         }
+        .modal-content h2 .sub {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
         .modal-content label {
             font-weight: 500;
             display: block;
@@ -738,6 +842,46 @@
         }
         .modal-content select option {
             background: var(--bg-secondary);
+        }
+
+        .modal-content .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .modal-content .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .modal-content .file-input-wrapper .file-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-content .file-input-wrapper .file-label:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .modal-content .file-input-wrapper .file-label i {
+            font-size: 1.2rem;
+        }
+        .modal-content .file-input-wrapper .file-label .file-name {
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
         .modal-actions {
@@ -778,60 +922,6 @@
         }
         .modal-actions .btn-cancel:hover {
             border-color: var(--text-muted);
-        }
-
-        /* ===== PORTFOLIO ITEMS ===== */
-        .portfolio-item {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .portfolio-item .p-title {
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--text-primary);
-        }
-        .portfolio-item .p-desc {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            flex: 1;
-            min-width: 100px;
-        }
-        .portfolio-item .p-status {
-            font-size: 0.55rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            padding: 2px 10px;
-            border-radius: 3px;
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-        .portfolio-item .p-status.completed {
-            background: rgba(30, 122, 46, 0.15);
-            color: var(--accent);
-        }
-        .portfolio-item .p-status.pending {
-            background: rgba(184, 122, 42, 0.12);
-            color: var(--warning);
-        }
-        .portfolio-item .btn-p-delete {
-            background: transparent;
-            border: none;
-            color: var(--danger);
-            cursor: pointer;
-            font-size: 0.8rem;
-            padding: 2px 6px;
-            transition: var(--transition);
-        }
-        .portfolio-item .btn-p-delete:hover {
-            color: var(--danger-hover);
         }
 
         /* ===== SAVE INDICATOR ===== */
@@ -1023,6 +1113,14 @@
             }
             .progress-circle-container {
                 justify-content: center;
+            }
+            .portfolio-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .portfolio-item .p-preview {
+                width: 100%;
+                height: 120px;
             }
         }
 
@@ -1687,44 +1785,92 @@
                 if (!v) return;
                 const items = v.portfolio || [];
                 content.innerHTML = `
-                            <h2>📁 Portfolio — ${v.name}</h2>
+                            <h2>📁 Portfolio — ${v.name} <span class="sub">(${v.xp} XP)</span></h2>
                             <div style="margin:10px 0;">
                                 ${items.length === 0 ? '<p style="color:var(--text-secondary);font-size:0.8rem;">No portfolio items yet.</p>' :
                                 items.map((p, idx) => `
                                     <div class="portfolio-item">
-                                        <div>
+                                        <div class="p-info">
                                             <div class="p-title">${p.title}</div>
-                                            <div class="p-desc">${p.description}</div>
+                                            <div class="p-desc">${p.description || ''}</div>
                                         </div>
-                                        <div style="display:flex;align-items:center;gap:6px;">
-                                            <span class="p-status ${p.status}">${p.status}</span>
-                                            <button class="btn-p-delete" onclick="deletePortfolioItem(${v.id}, ${idx})">×</button>
+                                        <span class="p-type ${p.type || 'link'}">${p.type || 'link'}</span>
+                                        <div class="p-actions">
+                                            ${p.type === 'image' ? `<a href="${p.file}" target="_blank"><i class="fas fa-eye"></i></a>` : ''}
+                                            ${p.type === 'file' ? `<a href="${p.file}" target="_blank"><i class="fas fa-download"></i></a>` : ''}
+                                            ${p.type === 'link' ? `<a href="${p.file}" target="_blank"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                                            ${p.type === 'image' && p.file ? `<div class="p-preview"><img src="${p.file}" alt="${p.title}" /></div>` : ''}
+                                            ${p.type === 'file' && p.file ? `<div class="p-preview"><i class="fas fa-file"></i></div>` : ''}
+                                            ${p.type === 'link' ? `<div class="p-preview"><i class="fas fa-link"></i></div>` : ''}
+                                            <button class="btn-p-delete" onclick="deletePortfolioItem(${v.id}, ${idx})">✕</button>
                                         </div>
                                     </div>
                                 `).join('')}
                             </div>
                             <hr style="border-color:var(--border-color);margin:10px 0;" />
-                            <label>Add Project</label>
+                            <label>Project Title</label>
                             <input type="text" id="modalPortTitle" placeholder="Project title" />
                             <label>Description</label>
                             <input type="text" id="modalPortDesc" placeholder="Brief description" />
-                            <label>Status</label>
-                            <select id="modalPortStatus">
-                                <option value="completed">Completed</option>
-                                <option value="pending">Pending</option>
+                            <label>Type</label>
+                            <select id="modalPortType" onchange="togglePortfolioFields()">
+                                <option value="link">Link</option>
+                                <option value="image">Image</option>
+                                <option value="file">File</option>
                             </select>
+                            <div id="portLinkField">
+                                <label>URL</label>
+                                <input type="text" id="modalPortFile" placeholder="https://example.com/project" />
+                            </div>
+                            <div id="portFileField" style="display:none;">
+                                <label>Upload File</label>
+                                <div class="file-input-wrapper">
+                                    <div class="file-label">
+                                        <i class="fas fa-upload"></i>
+                                        <span>Choose file...</span>
+                                        <span class="file-name" id="fileNameDisplay"></span>
+                                    </div>
+                                    <input type="file" id="modalPortFileInput" onchange="handleFileSelect(event)" />
+                                </div>
+                            </div>
                             <div class="modal-actions">
-                                <button class="btn-confirm" onclick="addPortfolioItem(${v.id})">Add</button>
+                                <button class="btn-confirm" onclick="addPortfolioItem(${v.id})">Add Project</button>
                                 <button class="btn-cancel" onclick="closeModal()">Close</button>
                             </div>
                         `;
+                // Set initial state
+                setTimeout(() => {
+                    const typeSelect = document.getElementById('modalPortType');
+                    if (typeSelect) {
+                        typeSelect.addEventListener('change', togglePortfolioFields);
+                    }
+                    togglePortfolioFields();
+                }, 50);
             }
 
             modal.classList.add('active');
         }
 
+        function togglePortfolioFields() {
+            const type = document.getElementById('modalPortType')?.value || 'link';
+            document.getElementById('portLinkField').style.display = type === 'link' || type === 'image' ? 'block' : 'none';
+            document.getElementById('portFileField').style.display = type === 'file' || type === 'image' ? 'block' : 'none';
+        }
+
+        let selectedFile = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('fileNameDisplay').textContent = file.name;
+            }
+        }
+
         function closeModal() {
             document.getElementById('dynamicModal').classList.remove('active');
+            selectedFile = null;
+            document.getElementById('fileNameDisplay').textContent = '';
         }
 
         // ============================================================
@@ -1833,21 +1979,71 @@
 
             const title = document.getElementById('modalPortTitle').value.trim();
             const description = document.getElementById('modalPortDesc').value.trim();
-            const status = document.getElementById('modalPortStatus').value;
+            const type = document.getElementById('modalPortType').value;
+
+            let file = '';
+
+            if (type === 'link') {
+                file = document.getElementById('modalPortFile').value.trim();
+                if (!file) {
+                    alert('Please enter a URL.');
+                    return;
+                }
+            } else if (type === 'image') {
+                // Check if it's a file upload or URL
+                const urlInput = document.getElementById('modalPortFile').value.trim();
+                if (selectedFile) {
+                    // Convert file to base64
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        file = e.target.result;
+                        savePortfolioItem(id, title, description, type, file);
+                    };
+                    reader.readAsDataURL(selectedFile);
+                    return;
+                } else if (urlInput) {
+                    file = urlInput;
+                } else {
+                    alert('Please select an image file or enter a URL.');
+                    return;
+                }
+            } else if (type === 'file') {
+                if (selectedFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        file = e.target.result;
+                        savePortfolioItem(id, title, description, type, file);
+                    };
+                    reader.readAsDataURL(selectedFile);
+                    return;
+                } else {
+                    alert('Please select a file.');
+                    return;
+                }
+            }
 
             if (!title) {
                 alert('Please enter a project title.');
                 return;
             }
 
+            savePortfolioItem(id, title, description, type, file);
+        }
+
+        function savePortfolioItem(id, title, description, type, file) {
+            const v = volunteers.find(vol => vol.id === id);
+            if (!v) return;
+
             if (!v.portfolio) v.portfolio = [];
-            v.portfolio.push({ title, description: description || 'No description', status });
+            v.portfolio.push({ title, description: description || 'No description', type, file });
 
             closeModal();
             openModal('portfolio', id);
             renderVolunteers();
             updateDashboard();
             autoSave();
+            selectedFile = null;
+            document.getElementById('fileNameDisplay').textContent = '';
         }
 
         function deletePortfolioItem(volId, itemIndex) {
@@ -1880,6 +2076,7 @@
         console.log('🌿 CTG Dashboard loaded!');
         console.log('🔑 Password: ctg2026');
         console.log('💾 Auto-save enabled');
+        console.log('📁 Portfolio supports: images, files & links');
     </script>
 
 </body>
